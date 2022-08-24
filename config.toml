@@ -1,0 +1,4 @@
+[package]
+name = 'sound'
+version = '1.0'
+email = 'example@example.com'
