@@ -2,3 +2,9 @@
 name = 'sound'
 version = '1.0'
 email = 'example@example.com'
+
+headers = ['alsa/asoundlib.h']
+
+[[libraries]]
+name = 'asound'
+function = 'snd_device_name_hint'
