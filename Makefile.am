@@ -1,8 +1,9 @@
 AM_CFLAGS = --std=c17
 
-bin_PROGRAMS=sound
-sound_SOURCES=src/sound.c
+bin_PROGRAMS = sound
+sound_SOURCES = src/sound.c
 
+man1_MANS = docs/sound.man
 
 clean-local:
 	@rm configure.scan configure.ac autoscan.log 

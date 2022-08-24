@@ -1,0 +1,17 @@
+.\" Manpage for sound.
+.\" Contact example@example.com to correct errors or typos.
+.TH sound 1 "24 August 2022" "1.0" "sound manual"
+.SH NAME
+sound \- list available sound cards
+.SH SYNOPSIS
+sound
+.SH DESCRIPTION
+sound is utility to list available sound cards.
+.SH OPTIONS
+The sound does not take any options
+.SH SEE ALSO
+alsamixer(1)
+.SH BUGS
+No known bugs.
+.SH AUTHOR
+comeillfoo (example@example.com)
