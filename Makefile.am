@@ -1,8 +1,7 @@
-AM_CFLAGS = --std=c17 -Wall -Wextra -Werror
-
+AM_CFLAGS = --std=c17
 
 bin_PROGRAMS=sound
-sound_SOURCES=sound.c
+sound_SOURCES=src/sound.c
 
 
 clean-local:
@@ -13,3 +12,4 @@ clean-local:
 	@rm aclocal.m4
 	@rm compile install-sh missing Makefile.in
 	@rm config.h config.h.in COPYING depcomp INSTALL stamp-h1
+	@rm -f a.out sound sound.o
