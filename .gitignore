@@ -1,0 +1,12 @@
+*
+!.gitignore
+!src
+!config.toml
+!configure.scan
+!configure.ac*
+!LICENSE
+!Makefile.am
+!README
+!NEWS
+!AUTHORS
+!ChangeLog
