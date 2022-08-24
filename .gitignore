@@ -3,8 +3,7 @@
 !src
 !src/*
 !config.toml
-!configure.scan
-!configure.ac*
+!configure.ac.py
 !LICENSE
 !Makefile.am
 !README
