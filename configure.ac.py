@@ -30,6 +30,8 @@ def main():
     content = content.replace("[VERSION]", config.package.version)
     content = content.replace("[BUG-REPORT-ADDRESS]", config.package.email)
     content = content.replace("AC_PROG_CC", "AC_PROG_CC\nAM_INIT_AUTOMAKE")
+    content = content.replace("# Checks for header files.", "# Checks for header files.\nAC_CHECK_HEADER([alsa/asoundlib.h])")
+    content = content.replace("# Checks for libraries.", "# Checks for libraries.\nAC_CHECK_LIB([asound], [snd_device_name_hint], [], [AC_MSG_ERROR([Unable to find libasound])])")
 
     with open('configure.ac', 'w') as configure_ac:
         configure_ac.write(content)
