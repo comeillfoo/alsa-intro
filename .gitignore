@@ -1,6 +1,7 @@
 *
 !.gitignore
 !src
+!src/*
 !config.toml
 !configure.scan
 !configure.ac*
