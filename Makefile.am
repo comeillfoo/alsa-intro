@@ -1,7 +1,8 @@
 AM_CFLAGS = --std=c17
 
-bin_PROGRAMS = sound
+bin_PROGRAMS = sound zelda
 sound_SOURCES = src/sound.c
+zelda_SOURCES = src/zelda.c
 
 man1_MANS = docs/sound.man
 
@@ -13,4 +14,4 @@ clean-local:
 	@rm aclocal.m4
 	@rm compile install-sh missing Makefile.in
 	@rm config.h config.h.in COPYING depcomp INSTALL stamp-h1
-	@rm -f a.out sound sound.o
+	@rm -f a.out sound sound.o zelda zelda.o
