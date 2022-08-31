@@ -90,12 +90,12 @@ int main(int argc, char** argv) {
 	fprintf(stderr, "Using format int16, sample rate %u, channels %u\n", sample_rate, channels);
 
 	// Set audio buffer length
-	u_int buffer_length_usec = 500 * 1000;
-	error = snd_pcm_hw_params_set_buffer_time_near(pcm, params, &buffer_length_usec, NULL);
-	if (error < 0) {
-        printf("Unable to set buffer time %u for playback: %s\n", buffer_length_usec, snd_strerror(error));
-        return error;
-    }
+	// u_int buffer_length_usec = 500 * 1000;
+	// error = snd_pcm_hw_params_set_buffer_time_near(pcm, params, &buffer_length_usec, NULL);
+	// if (error < 0) {
+    //     printf("Unable to set buffer time %u for playback: %s\n", buffer_length_usec, snd_strerror(error));
+    //     return error;
+    // }
 
 	// Apply configuration
 	error = snd_pcm_hw_params(pcm, params);
@@ -104,19 +104,61 @@ int main(int argc, char** argv) {
         return error;
     }
 
+	snd_pcm_uframes_t period_size;
+	error = snd_pcm_hw_params_get_period_size(params, &period_size, NULL);
+    if (error < 0) {
+		snd_pcm_hw_params_free(params);
+		snd_pcm_close(pcm);
+        printf("Unable to get period size for playback: %s\n", snd_strerror(error));
+        return error;
+    }
 
-	u_int frame_size = (16/8) * channels;
-	u_int buf_size = sample_rate * (16/8) * channels * buffer_length_usec / 1000000;
+	u_int buf_size = period_size * channels * 2;
 
-	// load MIDI file
-	// TODO: load MIDI file of zelda
-	bool is_end_of_midi = false;
-
-	while (!is_stop && !is_end_of_midi) {
-		is_end_of_midi = true;
+	// load melody file
+	// TODO: load music file of zelda
+	bool is_end_of_file = false;
+	FILE* zelda = fopen("zelda.wav", "rb");
+	if (zelda == NULL) {
+		snd_pcm_hw_params_free(params);
+		snd_pcm_close(pcm);
+		printf("Unable to find file zelda.wav\n");
+		return -EINVAL;
 	}
 
-	snd_pcm_hw_params_free(params);
+	printf("Using buffer size %u and frames %lu\n", buf_size, period_size);
+
+	while (!is_stop && !is_end_of_file) {
+		if (feof(zelda))
+			is_end_of_file = true;
+
+		char buffer[buf_size];
+		size_t count = fread(buffer, sizeof(char), buf_size, zelda);
+		if (count < buf_size) {
+			if (ferror(zelda)) {
+				fclose(zelda);
+				snd_pcm_hw_params_free(params);
+				snd_pcm_close(pcm);
+				printf("Error while reading file: zelda.wav\n");
+				return -1;
+			}
+		}
+
+		error = snd_pcm_writei(pcm, buffer, period_size);
+		if (-EPIPE == error)
+			snd_pcm_prepare(pcm);
+		else if (error < 0) {
+			fclose(zelda);
+			snd_pcm_hw_params_free(params);
+			snd_pcm_close(pcm);
+        	printf("Can't write to PCM device. %s\n", snd_strerror(error));
+        	return error;
+		}
+	}
+
+	fclose(zelda);
+	snd_pcm_drain(pcm);
 	snd_pcm_close(pcm);
+	snd_pcm_hw_params_free(params);
     return 0;
 }
